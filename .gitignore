@@ -44,3 +44,6 @@ _targets/
 
 # renv via capsule
 renv/
+
+# data files
+data/
