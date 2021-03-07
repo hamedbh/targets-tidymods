@@ -21,7 +21,15 @@ tar_plan(
     tar_target(folds, vfold_cv(training(splits), v = 10, strata = outcome)), 
     tar_target(base_rec, recipe(outcome ~ ., data = training(splits))), 
     # Decision tree
-    tar_target(tree_spec, specify_tree())
+    tar_target(tree_spec, specify_tree()), 
+    tar_target(tree_rec, create_tree_rec(base_rec)), 
+    tar_target(tree_wfl, 
+               workflow() %>% 
+                   add_model(tree_spec) %>% 
+                   add_recipe(tree_rec)
+    ), 
+    tar_target(tree_grid, create_tree_grid(tree_wfl))
+    
     # Elastic net
     # SVM
 )

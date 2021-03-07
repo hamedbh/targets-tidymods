@@ -8,8 +8,8 @@
 specify_tree <- function() {
     decision_tree(
         mode = "classification", 
-        tree_depth = tune(), 
         min_n = tune(), 
         cost_complexity = tune()
-    )
+    ) %>% 
+        set_engine("rpart")
 }
