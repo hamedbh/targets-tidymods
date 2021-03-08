@@ -1,7 +1,7 @@
-tune_tree_grid <- function(wfl, folds, size = 16L) {
+tune_elnet_grid <- function(wfl, folds, levels = 16L) {
     grid <- wfl %>% 
         parameters() %>% 
-        grid_max_entropy(size = size)
+        grid_regular(levels = levels)
     
     tune_grid(
         wfl,

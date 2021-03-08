@@ -30,8 +30,15 @@ tar_plan(
                    add_model(tree_spec) %>% 
                    add_recipe(tree_rec)
     ), 
-    tar_target(tree_grid, create_tree_grid(tree_wfl)), 
-    tar_target(tree_tune, tune_tree_grid(tree_wfl, folds, tree_grid))
+    tar_target(tree_tune, tune_tree_grid(tree_wfl, folds)), 
     # Elastic net
+    tar_target(elnet_spec, specify_elnet()), 
+    tar_target(elnet_rec, create_elnet_rec(base_rec)), 
+    tar_target(elnet_wfl, 
+               workflow() %>% 
+                   add_model(elnet_spec) %>% 
+                   add_recipe(elnet_rec)
+    ), 
+    tar_target(elnet_tune, tune_elnet_grid(elnet_wfl, folds))
     # SVM
 )
