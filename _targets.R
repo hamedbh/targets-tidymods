@@ -1,3 +1,5 @@
+options(clustermq.scheduler = "multicore")
+
 library(targets)
 library(tarchetypes)
 
@@ -28,8 +30,8 @@ tar_plan(
                    add_model(tree_spec) %>% 
                    add_recipe(tree_rec)
     ), 
-    tar_target(tree_grid, create_tree_grid(tree_wfl))
-    
+    tar_target(tree_grid, create_tree_grid(tree_wfl)), 
+    tar_target(tree_tune, tune_tree_grid(tree_wfl, folds, tree_grid))
     # Elastic net
     # SVM
 )
