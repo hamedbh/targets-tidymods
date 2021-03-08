@@ -23,22 +23,10 @@ tar_plan(
     tar_target(folds, vfold_cv(training(splits), v = 10, strata = outcome)), 
     tar_target(base_rec, recipe(outcome ~ ., data = training(splits))), 
     # Decision tree
-    tar_target(tree_spec, specify_tree()), 
-    tar_target(tree_rec, create_tree_rec(base_rec)), 
-    tar_target(tree_wfl, 
-               workflow() %>% 
-                   add_model(tree_spec) %>% 
-                   add_recipe(tree_rec)
-    ), 
+    tar_target(tree_wfl, create_tree_wfl(base_rec)), 
     tar_target(tree_tune, tune_tree_grid(tree_wfl, folds)), 
     # Elastic net
-    tar_target(elnet_spec, specify_elnet()), 
-    tar_target(elnet_rec, create_elnet_rec(base_rec)), 
-    tar_target(elnet_wfl, 
-               workflow() %>% 
-                   add_model(elnet_spec) %>% 
-                   add_recipe(elnet_rec)
-    ), 
+    tar_target(elnet_wfl, create_elnet_wfl(base_rec)), 
     tar_target(elnet_tune, tune_elnet_grid(elnet_wfl, folds))
     # SVM
 )
