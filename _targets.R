@@ -27,6 +27,9 @@ tar_plan(
     tar_target(tree_tune, tune_tree_grid(tree_wfl, folds)), 
     # Elastic net
     tar_target(elnet_wfl, create_elnet_wfl(base_rec)), 
-    tar_target(elnet_tune, tune_elnet_grid(elnet_wfl, folds))
+    tar_target(elnet_tune, tune_elnet_grid(elnet_wfl, folds)), 
     # SVM
+    tar_target(svm_wfl, create_svm_wfl(base_rec)), 
+    tar_target(svm_tune, tune_svm_grid(svm_wfl, folds))
+    
 )
