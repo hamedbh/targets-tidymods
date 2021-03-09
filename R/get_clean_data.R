@@ -1,5 +1,5 @@
-get_clean_data <- function(source_data) {
-    read_raw_data(source_data) %>% 
+get_clean_data <- function(raw_data) {
+    raw_data %>% 
         # details of the factors are taken from the data dictionary
         # Can ignore warnings, which are because there are no rows with the 
         # given Axx code. These manipulations use functions from the forcats 

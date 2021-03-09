@@ -24,7 +24,8 @@ model_values <- tibble::tibble(
 
 shared_targets <- tar_plan(
     tar_target(source_data, get_german_data("data"), format = "file"), 
-    tar_target(clean_data, get_clean_data(source_data)), 
+    tar_target(raw_data, read_raw_data(source_data)), 
+    tar_target(clean_data, get_clean_data(raw_data)), 
     tar_target(splits, initial_split(clean_data, prop = 0.8, strata = outcome)), 
     tar_target(folds, vfold_cv(training(splits), v = 10, strata = outcome)), 
     tar_target(base_rec, recipe(outcome ~ ., data = training(splits)))
