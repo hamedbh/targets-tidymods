@@ -13,6 +13,6 @@ tune_rf_grid <- function(wfl, folds, levels = 5L) {
         resamples = folds,
         grid = grid,
         metrics = metric_set(roc_auc),
-        control = control_stack_grid()
+        control = control_grid(verbose = TRUE, save_pred = TRUE)
     )
 }
