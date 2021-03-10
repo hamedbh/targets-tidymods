@@ -1,12 +1,13 @@
 tune_rf_grid <- function(wfl, folds, levels = 5L) {
-    
-    grid <- grid_regular(
-        list(
-            mtry = mtry(range = c(1L, 5L)), 
-            min_n = min_n()
-        ), 
-        levels = levels
-    )
+    grid <- wfl %>% 
+        parameters() %>% 
+        finalize(x = wfl %>% 
+                     pluck(
+                         "pre", "actions", "recipe", "recipe", "template"
+                     ) %>% 
+                     select(-outcome)
+        ) %>% 
+        grid_regular(levels = 5L)
     
     tune_grid(
         wfl,
