@@ -39,5 +39,16 @@ tar_plan(
         tar_target(rec, rec_fn(base_rec)), 
         tar_target(wfl, wfl_fn(rec)), 
         tar_target(res, tune_fn(wfl, folds))
+    ), 
+    # Try rebalancing methods
+    tar_map(
+        values = tibble::tibble(
+            upsample_type = c("bsmote", "nearmiss"), 
+            rec_fn = rlang::syms(paste0("create_", upsample_type, "_rec"))
+        ), 
+        names = "upsample_type", 
+        tar_target(rec, rec_fn(base_rec)), 
+        tar_target(wfl, create_rf_wfl(rec)), 
+        tar_target(res, tune_rf_grid(wfl, folds))
     )
 )
