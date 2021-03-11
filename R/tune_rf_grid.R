@@ -1,4 +1,4 @@
-tune_rf_grid <- function(wfl, folds, levels = 5L) {
+tune_rf_grid <- function(wfl, folds, levels = 8L) {
     grid <- wfl %>% 
         parameters() %>% 
         finalize(x = wfl %>% 
@@ -7,7 +7,7 @@ tune_rf_grid <- function(wfl, folds, levels = 5L) {
                      ) %>% 
                      select(-outcome)
         ) %>% 
-        grid_regular(levels = 5L)
+        grid_regular(levels = levels)
     
     tune_grid(
         wfl,
