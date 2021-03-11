@@ -1,4 +1,4 @@
-create_rf_wfl <- function(base_rec) {
+create_rf_wfl <- function(rec) {
     workflow() %>% 
         add_model(
             rand_forest(
@@ -9,8 +9,5 @@ create_rf_wfl <- function(base_rec) {
             ) %>% 
                 set_engine("ranger")
         ) %>% 
-        add_recipe(
-            base_rec %>% 
-                step_zv(all_predictors(), skip = TRUE)
-        )
+        add_recipe(rec)
 }

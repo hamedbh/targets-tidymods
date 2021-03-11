@@ -1,4 +1,4 @@
-create_svm_wfl <- function(base_rec) {
+create_svm_wfl <- function(rec) {
     workflow() %>%
         add_model(
             svm_rbf(
@@ -8,11 +8,5 @@ create_svm_wfl <- function(base_rec) {
             ) %>%
                 set_engine("kernlab")
         ) %>%
-        add_recipe(
-            base_rec %>%
-                step_novel(all_nominal(),-all_outcomes()) %>%
-                step_dummy(all_nominal(),-all_outcomes(), one_hot = TRUE) %>%
-                step_normalize(all_numeric(),-all_outcomes()) %>%
-                step_zv(all_predictors(), skip = TRUE)
-        )
+        add_recipe(rec)
 }

@@ -1,4 +1,4 @@
-create_tree_wfl <- function(base_rec) {
+create_tree_wfl <- function(rec) {
     workflow() %>% 
         add_model(
             decision_tree(
@@ -8,8 +8,5 @@ create_tree_wfl <- function(base_rec) {
             ) %>% 
                 set_engine("rpart")
         ) %>% 
-        add_recipe(
-            base_rec %>% 
-                step_zv(all_predictors(), skip = TRUE)
-        )
+        add_recipe(rec)
 }
