@@ -16,12 +16,6 @@ tar_option_set(
     )
 )
 
-model_values <- tibble::tibble(
-    model_type = c("tree", "elnet", "svm", "rf"), 
-    wfl_fn = rlang::syms(paste0("create_", model_type, "_wfl")), 
-    tune_fn = rlang::syms(paste0("tune_", model_type, "_grid"))
-)
-
 shared_targets <- tar_plan(
     tar_target(source_data, get_german_data("data"), format = "file"), 
     tar_target(raw_data, read_raw_data(source_data)), 
@@ -31,10 +25,18 @@ shared_targets <- tar_plan(
     tar_target(base_rec, recipe(outcome ~ ., data = training(splits)))
 )
 
+model_values <- tibble::tibble(
+    model_type = c("tree", "elnet", "svm", "rf"), 
+    rec_fn = rlang::syms(paste0("create_", model_type, "_rec")), 
+    wfl_fn = rlang::syms(paste0("create_", model_type, "_wfl")), 
+    tune_fn = rlang::syms(paste0("tune_", model_type, "_grid"))
+)
+
 model_targets <- tar_map(
     values = model_values, 
     names = "model_type", 
-    tar_target(wfl, wfl_fn(base_rec)), 
+    tar_target(rec, rec_fn(base_rec)), 
+    tar_target(wfl, wfl_fn(rec)), 
     tar_target(res, tune_fn(wfl, folds))
 )
 
