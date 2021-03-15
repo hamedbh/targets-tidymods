@@ -1,5 +1,32 @@
 get_clean_data <- function(raw_data) {
-    raw_data %>% 
+    assertthat::assert_that(tibble::is.tibble(raw_data))
+    ref_input_colnames <- c(
+        "acct_status",
+        "duration",
+        "credit_history",
+        "purpose",
+        "amount",
+        "savings_acct",
+        "present_emp_since",
+        "pct_of_income",
+        "sex_status",
+        "other_debtor_guarantor",
+        "resident_since",
+        "property",
+        "age",
+        "other_debts",
+        "housing",
+        "num_existing_credits",
+        "job",
+        "num_dependents",
+        "telephone",
+        "foreign_worker",
+        "outcome"
+    )
+    
+    assertthat::assert_that(all(colnames(raw_data) == ref_input_colnames))
+    
+    res <- raw_data %>% 
         # details of the factors are taken from the data dictionary
         # Can ignore warnings, which are because there are no rows with the 
         # given Axx code. These manipulations use functions from the forcats 
@@ -111,4 +138,86 @@ get_clean_data <- function(raw_data) {
             )
         ) %>%
         select(-sex_status)
+    
+    assertthat::assert_that(tibble::is.tibble(res))
+    
+    ref_output_colnames <- c(
+        "acct_status",
+        "duration",
+        "credit_history",
+        "purpose",
+        "amount",
+        "savings_acct",
+        "present_emp_since",
+        "pct_of_income",
+        "other_debtor_guarantor",
+        "resident_since",
+        "property",
+        "age",
+        "other_debts",
+        "housing",
+        "num_existing_credits",
+        "job",
+        "num_dependents",
+        "telephone",
+        "foreign_worker",
+        "outcome",
+        "gender"
+    )
+    
+    assertthat::assert_that(all(colnames(res) == ref_output_colnames))
+    
+    assertthat::assert_that(
+        all(
+            res[["acct_status"]] %in% c("overdrawn", 
+                                        "below_200DM", 
+                                        "over_200DM", 
+                                        "no_acct")
+        ), 
+        all(
+            res[["credit_history"]] %in% c("none_taken_all_paid", 
+                                           "all_paid_this_bank", 
+                                           "all_paid_duly",
+                                           "past_delays", 
+                                           "critical_acct")
+        ), 
+        all(res[["purpose"]] %in% c("car_new",
+                                    "car_used",
+                                    "furniture_equipment",
+                                    "radio_tv",
+                                    "dom_appliance",
+                                    "repairs",
+                                    "education",
+                                    "retraining",
+                                    "business",
+                                    "others")
+        ), 
+        all(res[["savings_acct"]] %in% c("to_100DM",
+                                         "to_500DM",
+                                         "to_1000DM",
+                                         "over_1000DM",
+                                         "unknwn_no_acct")
+        ), 
+        all(res[["present_emp_since"]] %in% c("unemployed",
+                                              "to_1_yr",
+                                              "to_4_yrs",
+                                              "to_7_yrs",
+                                              "over_7_yrs")
+        ), 
+        all(res[["other_debtor_guarantor"]] %in% c("none",
+                                                   "co_applicant",
+                                                   "guarantor")
+        ), 
+        all(res[["property"]] %in% c("real_estate",
+                                     "savings_insurance",
+                                     "car_other",
+                                     "unknwn_none")
+            ), 
+        all(res[["other_debts"]] %in% c("bank",
+                                        "stores",
+                                        "none")
+            )
+    )
+    res
+    
 }
